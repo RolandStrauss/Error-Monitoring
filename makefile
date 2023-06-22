@@ -18,8 +18,8 @@ dynarray.rpgle: dynarray.bnd
 %.srv.rpgle:
 	system -s "CHGATR OBJ('/home/ROLAND/builds/KnowledgeSharing/QRPGLESRC/$*.srv.rpgle') ATR(*CCSID) VALUE(1252)"
 	system "CRTRPGMOD MODULE($(BIN_LIB)/$*) SRCSTMF('/home/ROLAND/builds/KnowledgeSharing/QRPGLESRC/$*.srv.rpgle') DBGVIEW(*SOURCE) OPTION(*EVENTF)"
-	system "CRTSRVPGM SRVPGM($(BIN_LIB)/$*) MODULE($(BIN_LIB)/$*) EXPORT(*SRCFILE) SRCSTMF('/home/ROLAND/dynamicarray/qsrvsrc/$*.bnd')"
+	system "CRTSRVPGM SRVPGM($(BIN_LIB)/$*) MODULE($(BIN_LIB)/$*) EXPORT(*SRCFILE) SRCSTMF('/home/ROLAND/builds/KnowledgeSharing/qsrvsrc/$*.bnd')"
 	system "DLTOBJ OBJ($(BIN_LIB)/$*) OBJTYPE(*MODULE)"
 
 %.bnd:
-	system -s "CHGATR OBJ('/home/ROLAND/dynamicarray/qsrvsrc/$*.bnd') ATR(*CCSID) VALUE(1252)"
+	system -s "CHGATR OBJ('/home/ROLAND/builds/KnowledgeSharing/qsrvsrc/$*.bnd') ATR(*CCSID) VALUE(1252)"
