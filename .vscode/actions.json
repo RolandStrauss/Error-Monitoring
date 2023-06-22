@@ -141,7 +141,7 @@
     "extensions": [
       "GLOBAL"
     ],
-    "name": "Build all",
+    "name": "Build all 🔨",
     "command": "OPT=*EVENTF BUILDLIB=&CURLIB /QOpenSys/pkgs/bin/makei build",
     "environment": "pase",
     "deployFirst": true,
@@ -154,7 +154,7 @@
     "extensions": [
       "GLOBAL"
     ],
-    "name": "Build current",
+    "name": "Build current 🔨",
     "command": "OPT=*EVENTF BUILDLIB=&CURLIB /QOpenSys/pkgs/bin/makei compile -f &BASENAME",
     "environment": "pase",
     "deployFirst": true,
@@ -162,5 +162,14 @@
       ".logs",
       ".evfevent"
     ]
-  }
+  },
+  {
+    "name" : "Deploy and built 🔨",
+    "environment" : "pase",
+    "extensions" : [
+        "GLOBAL"
+    ], 
+    "deployFirst" : true,
+    "command" : "/QOpenSys/pkgs/bin/gmake BIN_LIB=&CURLIB OPTS=*EVENTF"
+}
 ]
