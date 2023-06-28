@@ -25,11 +25,15 @@ ctl-opt dftactgrp(*no) actgrp(*NEW);
 // /INCLUDE qrpglesrc,genpssrcb
 // /INCLUDE qrpglesrc,genpssrpr
 // ___ Procedure Interface ____________________________________________________
+dcl-pr SysCmd           uns(10) extproc(*cwiden:'system');
+   *n                   pointer value;
+end-pr;
 // ___ Data Structures ________________________________________________________
 dcl-ds CUSMSTDS extname('CUSMST') qualified;
 end-ds;
 // ___ Stand Alone Variables __________________________________________________
-dcl-s ErrMsg varchar(52) inz(*Blank);
+dcl-s DspMsg varchar(52) inz(*Blank);
+dcl-s ErrMsg            char(7) import('_EXCP_MSGID');
 // ___ Constants ______________________________________________________________
 
 Dcl-Proc KSS0630;
@@ -45,7 +49,7 @@ Dcl-Proc KSS0630;
    dcl-s CustomerLastName       like(CUSMSTDS.lstnam);
 
    // ___ Constants ___
-   dcl-c ERROROPENINGTABLE    'Error opening table: ';
+   // dcl-c ERROROPENINGTABLE    'Error opening table: ';
 
 
    // ___ Set SQL Options ___
@@ -58,20 +62,20 @@ Dcl-Proc KSS0630;
       CustomerLastName = KSS0630_Proc1(CustomerNumber);
 
       on-excp 'RNX0103';  // Result to Big
-      ErrMsg = 'Message RNX0103, status ' + %char(%status());
-      dsply %trim(ErrMsg);
+      DspMsg = 'Message RNX0103, status ' + %char(%status());
+      dsply %trim(DspMsg);
       on-excp 'CPF4101'; // File not Found
-      ErrMsg = 'Message CPF4101, status ' + %char(%status());
-      dsply %trim(ErrMsg);
+      DspMsg = 'Message CPF4101, status ' + %char(%status());
+      dsply %trim(DspMsg);
       on-excp 'CPF9897';
-      ErrMsg = 'Message from KSS0630_Proc1()';
-      dsply %trim(ErrMsg);
+      DspMsg = 'Message from KSS0630_Proc1()';
+      dsply %trim(DspMsg);
       on-excp(c) 'CPF9898';
-      ErrMsg = 'KSS0630_Proc1() Just broke with an Escape message';
-      dsply %trim(ErrMsg);
+      DspMsg = 'KSS0630_Proc1() Just broke with an Escape message';
+      dsply %trim(DspMsg);
    on-error 222; // pointer not set
-      ErrMsg = 'Handling pointer-not-set';
-      dsply %trim(ErrMsg);
+      DspMsg = 'Handling pointer-not-set';
+      dsply %trim(DspMsg);
    on-error;
       // pssr_prcID = %proc();
       // pssr_dtaID = 'XX' + %char(000000000);
@@ -107,8 +111,8 @@ Dcl-Proc KSS0630_Proc1;
       If (not %open(CUSMST ));
          open(e) CUSMST ;
          If (%error);
-            ErrMsg = 'Failed to open CUSMST table';
-            snd-msg *escape  ErrMsg;
+            DspMsg = 'Failed to open CUSMST table';
+            snd-msg *escape  DspMsg;
             // Return;
          endIf;
       endIf;
@@ -116,18 +120,18 @@ Dcl-Proc KSS0630_Proc1;
       chain CUSNUM CUSMST dsCUSMST;
       // ____________________________________
       if (not %found(CUSMST));
-         ErrMsg = 'Customer number not found';
-         snd-msg *escape ErrMsg; // CPF9898 is default for *escape
+         DspMsg = 'Customer number not found';
+         snd-msg *escape DspMsg; // CPF9898 is default for *escape
       else;
          return %trim(dsCUSMST.lstnam);
       endif;
       // ____________________________________
       on-excp 'RNX0103'; // Result to Big
-      ErrMsg = 'Message RNX0103, status ' + %char(%status());
-      snd-msg *escape ErrMsg;
+      DspMsg = 'Message RNX0103, status ' + %char(%status());
+      snd-msg *escape DspMsg;
       on-excp 'CPF4101'; // File not Found
-      ErrMsg = 'Message CPF4101, status ' + %char(%status());
-      snd-msg *escape ErrMsg;
+      DspMsg = 'Message CPF4101, status ' + %char(%status());
+      snd-msg *escape DspMsg;
    on-error;
       // pssr_prcID = %proc();
       // pssr_dtaID = 'XX' + %char(000000000);
@@ -142,8 +146,8 @@ Dcl-Proc KSS0630_Proc1;
       If (%open(CUSMST  ));
          close(e) CUSMST   ;
          If (%error);
-            ErrMsg = 'Failed to close CUSMST table';
-            snd-msg *escape  ErrMsg;
+            DspMsg = 'Failed to close CUSMST table';
+            snd-msg *escape  DspMsg;
             // Return;
          endIf;
       endIf;

@@ -1,4 +1,5 @@
 **free
+// ref: https://www.rpgpgm.com/2015/08/display-screens-of-results-without.html
 ctl-opt dftactgrp(*no) ;
 
 // dcl-pr QCMDEXC extpgm ;
