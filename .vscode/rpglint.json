@@ -5,7 +5,7 @@
   "NoSELECTAll": true,
   "UppercaseConstants": true,
   "IncorrectVariableCase": true,
-  "StringLiteralDupe": true,
+  "StringLiteralDupe": false,
   "NoSQLJoins": true,
   "PrettyComments": true,
   "NoGlobalSubroutines": true,
