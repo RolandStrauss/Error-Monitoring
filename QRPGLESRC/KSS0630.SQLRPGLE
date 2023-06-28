@@ -18,12 +18,12 @@ ctl-opt debug(*constants);
 ctl-opt dftactgrp(*no) actgrp(*NEW);
 /ENDIF
 
-Ctl-Opt bnddir ('GENPSSRBD');
+// Ctl-Opt bnddir ('GENPSSRBD');
 
 // ___ Files __________________________________________________________________
 // ___ Copy member include of declaratives ____________________________________
-/INCLUDE qrpglesrc,genpssrcb
-/INCLUDE qrpglesrc,genpssrpr
+// /INCLUDE qrpglesrc,genpssrcb
+// /INCLUDE qrpglesrc,genpssrpr
 // ___ Procedure Interface ____________________________________________________
 // ___ Data Structures ________________________________________________________
 dcl-ds CUSMSTDS extname('CUSMST') qualified;
@@ -55,7 +55,7 @@ Dcl-Proc KSS0630;
      CloSqlCsr = *EndMod;
 
    Monitor;
-      CustomerLastName = KSS0630_Proc1(CUSMSTDS.EMPNO);
+      CustomerLastName = KSS0630_Proc1(CustomerNumber);
 
       on-excp 'RNX0103';  // Result to Big
       ErrMsg = 'Message RNX0103, status ' + %char(%status());
@@ -87,19 +87,17 @@ End-Proc KSS0630;
 
 Dcl-Proc KSS0630_Proc1;
    Dcl-Pi *n            varchar(15);
-      empno                like(CUSMSTDS.empno);
+      CUSNUM                like(CUSMSTDS.CUSNUM);
    End-Pi;
 
    // ___ Files ___
    dcl-f  CUSMST        disk usage(*input) keyed
-                           // extdesc(ExternalTable) extfile(*extdesc)
-                           rename(CUSMST:emprec)
-                           usropn;
+                        usropn;
 
    // ___ Copy member include of declaratives ___
    // ___ Procedure Interface ___
    // ___ Data Structures ___
-   dcl-ds dsCUSMST likerec(emprec:*input);
+   dcl-ds dsCUSMST likerec(CUSREC:*input);
    // ___ Stand Alone Variables ___
    // dcl-s ExternalTable varchar(10) inz('CUSMST');
    // ___ Constants ___
@@ -115,10 +113,10 @@ Dcl-Proc KSS0630_Proc1;
          endIf;
       endIf;
       // ____________________________________
-      chain empno CUSMST dsCUSMST;
+      chain CUSNUM CUSMST dsCUSMST;
       // ____________________________________
       if (not %found(CUSMST));
-         ErrMsg = 'CUSMST number not found';
+         ErrMsg = 'Customer number not found';
          snd-msg *escape ErrMsg; // CPF9898 is default for *escape
       else;
          return %trim(dsCUSMST.lstnam);

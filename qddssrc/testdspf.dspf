@@ -1,0 +1,11 @@
+     A                                      DSPSIZ(24 80 *DS3)
+     A          R SCREEN1
+     A                                      LOCK
+     A                                      FRCDTA
+     A                                  3  3'What has finished :'
+     A            FLD001        50   O  3 23
+     A                                  4  3'What is going on  :'
+     A            FLD002    R        O  4 23REFFLD(FLD001  *SRC)
+     A          R SCREEN2
+     A                                  3  3'Job has finished'
+     A                                  4  3'Press Enter'
