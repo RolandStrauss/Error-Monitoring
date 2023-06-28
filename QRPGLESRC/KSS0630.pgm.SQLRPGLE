@@ -1,4 +1,5 @@
 **free
+// ref: https://www.ibm.com/docs/en/i/7.4?topic=codes-monitor-begin-monitor-group
 Ctl-Opt main(KSS0630) ;
 
 ctl-opt Copyright('(C) MMerge DevOps | 2023 | KSS0630.SQLRPGLE') ;
@@ -21,6 +22,7 @@ ctl-opt dftactgrp(*no) actgrp(*NEW) ;
 // Ctl-Opt bnddir ('GENPSSRBD') ;
 
 // ___ Files __________________________________________________________________
+// DCL-F badfile DISK(10) USROPN;
 // ___ Copy member include of declaratives ____________________________________
 // /INCLUDE qrpglesrc,genpssrcb
 // /INCLUDE qrpglesrc,genpssrpr
@@ -29,11 +31,12 @@ dcl-pr SysCmd           uns(10) extproc(*cwiden:'system') ;
    *n                   pointer value ;
 end-pr ;
 // ___ Data Structures ________________________________________________________
-dcl-ds CUSMSTDS extname('CUSMST') qualified ;
+dcl-ds CUSMSTDS         extname('CUSMST') qualified ;
 end-ds ;
 // ___ Stand Alone Variables __________________________________________________
-dcl-s DspMsg varchar(52) inz(*Blank) ;
+dcl-s DspMsg            varchar(52) inz(*Blank) ;
 dcl-s ErrMsg            char(7) import('_EXCP_MSGID') ;
+DCL-S status            PACKED(5);
 // ___ Constants ______________________________________________________________
 
 Dcl-Proc KSS0630 ;
@@ -52,6 +55,7 @@ Dcl-Proc KSS0630 ;
    dcl-s Ptr            pointer ;
    dcl-s PointerVar     char(1) based(Ptr) ;
    dcl-s switch         ind inz(*On) ;
+   dcl-s tosmall        packed(2) ;
    // ___ Constants ___
    // dcl-c ERROROPENINGTABLE    'Error opening table: ' ;
 
@@ -72,10 +76,19 @@ Dcl-Proc KSS0630 ;
          PointerVar = 'Roland' ;
       endif ;
 
+      // tosmall = 100 * 10 ;
+
+      // OPEN badfile;
+
+      // SysCmd('DSPOBJD OBJ(ROLAND1/BLAH) OBJTYPE(*FILE)  ') ;
+
       CustomerLastName = KSS0630_Proc1(CustomerNumber) ;
 
       on-excp 'RNX0103' ;  // Result to Big
       DspMsg = 'Message RNX0103, status ' + %char(%status()) ;
+      dsply %trim(DspMsg) ;
+      on-excp 'CPF2105' ; // File not Found
+      DspMsg = 'Message CPF2105, status ' + %char(%status()) ;
       dsply %trim(DspMsg) ;
       on-excp 'CPF4101' ; // File not Found
       DspMsg = 'Message CPF4101, status ' + %char(%status()) ;
