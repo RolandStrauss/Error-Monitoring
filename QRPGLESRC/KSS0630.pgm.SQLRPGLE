@@ -205,5 +205,3 @@ Dcl-Proc KSS0630_Proc1 ;
       endIf ;
 
 End-Proc KSS0630_Proc1 ;
-
-
