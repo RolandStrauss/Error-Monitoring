@@ -1,6 +1,5 @@
 {
-  "indent": 3,
-  "PrototypeCheck": true,
+    "PrototypeCheck": true,
   "NoOCCURS": true,
   "NoSELECTAll": true,
   "UppercaseConstants": true,
