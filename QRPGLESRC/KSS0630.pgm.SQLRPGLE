@@ -1,5 +1,5 @@
 **free
-// ref: https://www.ibm.com/docs/en/i/7.4?topic=codes-monitor-begin-monitor-group
+
 Ctl-Opt main(KSS0630) ;
 
 ctl-opt Copyright('(C) Roland Strauss | 2023 | KSS0630.SQLRPGLE') ;
@@ -148,6 +148,7 @@ Dcl-Proc KSS0630_Proc1 ;
 
    // ___ Files ___
    dcl-f  CUSMST        disk usage(*input) keyed
+                        // rename(CUSMST:cusrec)
                         usropn ;
 
    // ___ Copy member include of declaratives ___
